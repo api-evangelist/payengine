@@ -1,0 +1,66 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs/getting-started-1/getting-started
+name: PayEngine sandbox and test environment
+summary: >-
+  PayEngine provides a separate Sandbox account rather than a test-mode flag on a live
+  account. Inside the sandbox every developer holds Admin permissions for unrestricted
+  testing, tokens are minted with recognisable sandbox prefixes, and transactions run the
+  full authorization flow without settling. The published test-card and magic-value
+  tables live behind the partner-login API reference, so they could not be captured here.
+available: true
+model: separate-account
+environments:
+- name: Sandbox
+  description: >-
+    Dedicated sandbox account. Docs state "Developers have Admin level permissions within
+    the Sandbox account for unrestricted testing & integration."
+  permissions_note: Admin-level for all developers, regardless of their live-account role.
+  env_field_value: sandbox
+  env_field_note: 'Sample payloads carry an env field whose value is sandbox.'
+- name: Production
+  description: Live account with role-restricted permissions.
+key_prefixes:
+- prefix: pk_test_
+  credential: public key
+  environment: test
+  evidence: Docs show publicKey "pk_test_xxx" in the web and iOS integration examples.
+token_prefixes:
+- prefix: card_sandbox_
+  object: card token
+  example_shape: card_sandbox_<random>
+  note: >-
+    Sandbox card tokens are self-identifying, so a payload cannot be mistaken for a live
+    one. Example values appear in published sample responses.
+- prefix: ba_sandbox_
+  object: bank account token
+  example_shape: ba_sandbox_<random>
+  note: Sandbox ACH/bank-account tokens carry a matching prefix.
+test_values:
+  published_publicly: false
+  note: >-
+    PayEngine documents a transaction testing page, but it sits at
+    https://docs-api.payengine.co/transactions/testing which requires a partner login. No
+    test card numbers, magic amounts or trigger values are published on the open docs
+    host, so none are recorded here. The one PAN visible in the open docs (411111xxxxxx1111)
+    appears only inside a masked receipt sample and is not presented as a test card.
+  gated_reference: https://docs-api.payengine.co/transactions/testing
+test_clocks:
+  supported: false
+  note: No time simulation or test-clock facility is documented.
+fixtures_and_triggers:
+  published: false
+  note: >-
+    No fixture generator or event-trigger tooling is documented for forcing webhook
+    deliveries or specific decline outcomes in sandbox.
+third_party_sandboxes_referenced:
+- name: Apple Pay sandbox testing
+  url: https://developer.apple.com/apple-pay/sandbox-testing/
+- name: Google Pay integration checklist
+  url: https://developers.google.com/pay/api/android/guides/test-and-deploy/integration-checklist
+partner_certification:
+  url: https://docs.payengine.co/developer-docs/certification/partner-certification
+  note: >-
+    The partner-certification suite is the closest thing PayEngine publishes to a public
+    test plan - it enumerates the integration, validation and sanity test cases a partner
+    must pass.

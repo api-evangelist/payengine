@@ -1,0 +1,137 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  Registry metadata endpoints (registry.npmjs.org, pub.dev/api/packages,
+  api.wordpress.org/plugins/info) plus the github.com/payengine organization and the
+  public developer docs at https://docs.payengine.co/developer-docs, all fetched
+  2026-08-26.
+name: PayEngine client libraries and distributions
+summary: >-
+  PayEngine publishes first-party client libraries across six distribution channels -
+  npm (web/JS and React Native), pub.dev (Flutter), WordPress.org (WooCommerce gateway
+  plugin), Swift Package Manager (iOS and SoftPOS), and a CDN-hosted web-component
+  bundle. All npm packages are published by the payengine-dev account under a
+  @payengine.co address, which is how first-party ownership was established. There is no
+  Python, Ruby, Go, Java, .NET or Rust client. The PHP SDK on GitHub has not been pushed
+  since February 2023 and carries no tagged release.
+official_count: 7
+registries_checked:
+- npm
+- pub.dev
+- WordPress.org plugin directory
+- Swift Package Manager (GitHub tags)
+- PyPI
+- RubyGems
+packages:
+- name: payengine
+  registry: npm
+  url: https://www.npmjs.com/package/payengine
+  official: true
+  official_evidence: >-
+    Sole npm maintainer is payengine-dev <dev@payengine.co>, an address on the company's
+    own domain.
+  language: javascript
+  version: 1.0.13
+  published: '2025-08-01'
+  release_count: 19
+  note: >-
+    Registry record carries no description, repository or homepage field, so the package
+    is undiscoverable from npm metadata alone.
+- name: payengine-react-native
+  registry: npm
+  url: https://www.npmjs.com/package/payengine-react-native
+  official: true
+  official_evidence: >-
+    Same npm maintainer (payengine-dev <dev@payengine.co>); linked from the PayEngine
+    developer docs.
+  language: javascript
+  version: 1.0.4
+  published: '2022-09-23'
+  note: >-
+    ABANDONMENT SIGNAL - last published 2022-09-23, nearly four years before this probe,
+    while the Flutter and Swift SDKs shipped in 2026. React Native consumers are on a
+    library that predates 3DS, Tap to Pay, merchant-session security and the whole
+    orchestration surface documented today.
+- name: payengine
+  registry: pub.dev
+  url: https://pub.dev/packages/payengine
+  official: true
+  official_evidence: >-
+    pubspec homepage is https://payengine.co; described as "The PayEngine Flutter SDK".
+    Linked from the PayEngine developer docs.
+  language: dart
+  version: 2.1.0
+  published: '2026-03-05'
+  description: >-
+    The PayEngine Flutter SDK allows you to build delightful payment experiences in your
+    native Android and iOS apps using Flutter.
+- name: payengine-payment-gateway
+  registry: wordpress.org
+  url: https://wordpress.org/plugins/payengine-payment-gateway/
+  official: true
+  official_evidence: >-
+    Published by the WordPress.org author profile "payengine"; documented in the
+    PayEngine developer docs as "PayEngine Payment Gateway for WooCommerce".
+  language: php
+  version: 1.0.0
+  published: '2025-02-19'
+  note: WooCommerce payment gateway plugin. Still on its initial 1.0.0 release.
+- name: payengine-swift-package
+  registry: swift-package-manager
+  url: https://github.com/payengine/payengine-swift-package
+  official: true
+  official_evidence: Published in the github.com/payengine organization.
+  language: swift
+  version: 1.1.1
+  published: '2026-03-05'
+  note: >-
+    Version read from the newest git tag; SPM has no central registry metadata endpoint.
+    Date is the repository's last push (2026-03-05), which is the closest dated signal
+    available.
+- name: payengine-softpos-swift-package
+  registry: swift-package-manager
+  url: https://github.com/payengine/payengine-softpos-swift-package
+  official: true
+  official_evidence: Published in the github.com/payengine organization.
+  language: swift
+  version: 1.1.7
+  published: '2025-12-15'
+  note: >-
+    SoftPOS / Tap to Pay on iPhone package. Version from newest git tag; date is the
+    repository's last push.
+- name: payengine-php-sdk
+  registry: github
+  url: https://github.com/payengine/payengine-php-sdk
+  official: true
+  official_evidence: Published in the github.com/payengine organization.
+  language: php
+  version: null
+  published: null
+  note: >-
+    Checked, nothing to record - the repository carries no git tags and is absent from
+    Packagist, so there is no released version to report. Last push 2023-02-14, making
+    this the most decayed first-party artifact PayEngine ships.
+- name: embed.js
+  registry: cdn
+  url: https://console.payengine.co/js/1.0.0/embed.js
+  official: true
+  official_evidence: >-
+    Served from PayEngine's own console host and documented as the web-component loader
+    in the developer docs.
+  language: javascript
+  version: 1.0.0
+  published: null
+  note: >-
+    Version is pinned in the URL path (/js/1.0.0/), so a consumer can tell what they are
+    loading, but a CDN script has no metadata endpoint and no publication date is
+    exposed. Its sibling loader /js/1.0.0/securefields.min.js is on the same pinned path.
+absent:
+- registry: pypi
+  checked: '2026-08-26'
+  result: 404 - no PayEngine package
+- registry: rubygems
+  checked: '2026-08-26'
+  result: no first-party gem found
+- registry: packagist
+  checked: '2026-08-26'
+  result: PHP SDK is GitHub-only, never published to Packagist

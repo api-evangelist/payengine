@@ -1,0 +1,33 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs
+name: PayEngine rate limits
+summary: >-
+  PayEngine publishes no rate limits. The phrase "rate limit" does not appear anywhere in
+  its 368KB of public developer documentation, no X-RateLimit-* or RateLimit-* response
+  headers are described, no Retry-After behaviour is specified, and no 429 status is
+  documented. An integrator - human or agent - has no published way to know how fast it
+  may call, or how the platform will tell it to slow down.
+limit_count: 0
+documented: false
+checked: '2026-08-26'
+headers: []
+exhaustion_status_code: null
+retry_after: null
+burst: null
+evidence:
+- probe: >-
+    Full-text search for "rate limit", "ratelimit", "throttl", "429" and "quota" across
+    the complete public docs corpus (https://docs.payengine.co/llms-full.txt, 368,174
+    bytes, fetched 2026-08-26).
+  result: no matches
+- probe: https://api.payengine.co/
+  status: 400
+  result: >-
+    Unauthenticated requests return a JSON 400 envelope carrying no rate-limit headers.
+    No limit could be observed live without credentials.
+gated_reference_note: >-
+  PayEngine's API reference at https://docs-api.payengine.co/ requires a partner login.
+  If rate limits are documented anywhere, that is the likely location - this artifact
+  records that they are not documented on any surface a prospective integrator can reach
+  before signing up.

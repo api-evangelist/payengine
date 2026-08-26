@@ -1,0 +1,47 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  Web search plus direct probes of api.payengine.co, docs.payengine.co,
+  console.payengine.co and www.payengine.co on 2026-08-26.
+name: PayEngine MCP posture
+summary: >-
+  PayEngine ships no MCP server. No hosted/remote endpoint, no stdio package on npm or
+  PyPI, no mention of Model Context Protocol anywhere in its documentation, and no
+  agent-facing surface of any kind. No candidate tool list could be derived either,
+  because PayEngine publishes no OpenAPI to derive one from.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+status: absent
+tools: []
+tools_derivable: false
+tools_not_derivable_reason: >-
+  Deriving a candidate tool list requires an OpenAPI to enumerate operations from.
+  PayEngine's API reference is behind a partner login (https://docs-api.payengine.co/) and
+  no machine-readable contract is published, so there is nothing to derive against. No
+  tool names are invented here.
+probes:
+- url: https://api.payengine.co/
+  status: 400
+  result: Generic API 400 envelope; no MCP surface.
+- url: https://console.payengine.co/.well-known/agent-card.json
+  status: 200
+  result: >-
+    SPA catch-all - an 814-byte HTML shell identical to the one returned for every other
+    path. Not an agent card, and no MCP endpoint lead.
+- url: https://www.payengine.co/.well-known/ai-plugin.json
+  status: 404
+- search: PayEngine MCP server / Model Context Protocol
+  result: No PayEngine MCP server found in search or in any public MCP registry listing.
+pointer_emitted: false
+pointer_withheld_reason: >-
+  No MCPServer pointer is wired into apis.yml. A pointer would assert an agent surface
+  PayEngine does not operate.
+agent_readiness_note: >-
+  The docs host does serve a GitBook-generated llms.txt and supports a documented
+  ?ask=<question> retrieval parameter on any page, which is the only agent-oriented
+  affordance found - and it is GitBook's, not PayEngine's.

@@ -1,23 +1,163 @@
 aid: payengine
 name: PayEngine
-description: 'PayEngine is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  PayEngine is an embedded-payments and payment-facilitation platform for vertical market
+  SaaS companies, operated by Platform Factory, Inc. It lets a software company offer
+  payments to its own customers without building an acquiring stack: PayEngine handles
+  merchant onboarding and underwriting, PCI-scoped card and bank-account capture through
+  hosted SecureFields and a <pay-engine> web-component library, card and ACH processing
+  with 3-D Secure, AVS and Level 2/Level 3 interchange data, network tokenization, Tap to
+  Pay and cloud-connected terminals, hosted payment links, subscriptions, disputes,
+  settlement and payouts. A gateway-orchestration layer routes across multiple
+  processors. The platform is a PCI DSS Level 1 certified Service Provider, listed in
+  Visa's Global Registry under Platform Factory, Inc. Integration is REST plus a signed
+  webhook surface of 37 documented events; the REST reference itself requires a partner
+  login.
+image: https://cdn.prod.website-files.com/64cc25b62ffdab8b077809ed/64f2c783505aa955d658014b_payengine-opengrpah.jpg
 url: https://raw.githubusercontent.com/api-evangelist/payengine/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
+x-enrichment:
+  date: '2026-08-26'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1
+x-coverage:
+  state: covered
+  detail: >-
+    Public developer docs, llms.txt, webhook catalog, AVS code table, PCI evidence,
+    packages and status page were all readable and captured. The one wall hit was the
+    REST API reference itself, which is behind a partner login at docs-api.payengine.co -
+    so no OpenAPI, no operationIds, no test-card table and no per-operation error catalog
+    could be read, and skills/, overlays/ and scopes/ are correspondingly absent.
+  evidence:
+  - url: https://docs.payengine.co/developer-docs
+    status: 200
+  - url: https://docs.payengine.co/llms.txt
+    status: 200
+  - url: https://docs-api.payengine.co/openapi.json
+    status: 200
+  - url: https://api.payengine.co/openapi.json
+    status: 400
+  checked: '2026-08-26'
 tags:
+- Payments
+- Embedded Payments
+- Payment Facilitation
+- Merchant Onboarding
+- Payment Gateway
+- Financial Services
+- ACH
+- Tokenization
+- Webhooks
+- Fintech
 - Company
-apis: []
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- name: PayEngine Platform API
+  description: >-
+    REST API for merchant onboarding, card and ACH transaction processing (auth, sale,
+    capture, void, refund, offline and device sale), card and bank-account tokenization,
+    gateway orchestration, hosted payment links, subscriptions, disputes and reporting.
+    Authenticated server-to-server with an HTTP Basic partner private key; embedded UI is
+    authorized with a short-lived merchant session token. The full reference is gated
+    behind a partner login.
+  humanURL: https://docs.payengine.co/developer-docs
+  baseURL: https://api.payengine.co
+  tags:
+  - Payments
+  - Merchant Onboarding
+  - Transactions
+  properties:
+  - type: Documentation
+    url: https://docs.payengine.co/developer-docs
+  - type: APIReference
+    url: https://docs-api.payengine.co/
+  - type: GettingStarted
+    url: https://docs.payengine.co/developer-docs/getting-started-1/getting-started
+  - type: Authentication
+    url: authentication/payengine-authentication.yml
+  - type: Conventions
+    url: conventions/payengine-conventions.yml
+  - type: ErrorCatalog
+    url: errors/payengine-problem-types.yml
+  - type: DeclineCodes
+    url: errors/payengine-decline-codes.yml
+  - type: DataModel
+    url: data-model/payengine-data-model.yml
+  - type: Webhooks
+    url: asyncapi/payengine-webhooks.yml
+  - type: RateLimits
+    url: rate-limits/payengine-rate-limits.yml
 common:
+- type: DomainSecurity
+  url: security/payengine-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/payengine-vulnerability-disclosure.yml
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://www.payengine.co/
+- type: DeveloperPortal
+  url: https://docs.payengine.co/developer-docs
+- type: Documentation
+  url: https://docs.payengine.co/developer-docs
+- type: APIReference
+  url: https://docs-api.payengine.co/
+- type: GettingStarted
+  url: https://docs.payengine.co/developer-docs/getting-started-1/getting-started
+- type: Support
+  url: https://www.payengine.co/contact-us
+- type: Blog
+  url: https://www.payengine.co/blog
+- type: GitHubOrganization
+  url: https://github.com/payengine
+- type: Pricing
+  url: https://www.payengine.co/pricing
+- type: SignUp
+  url: https://console.payengine.co/signin
+- type: TermsOfService
+  url: https://www.payengine.co/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.payengine.co/privacy-policy
+- type: StatusPage
+  url: https://status.payengine.co/
+- type: Security
+  url: https://www.payengine.co/security
+- type: Compliance
+  url: conformance/payengine-conformance.yml
+- type: Conformance
+  url: conformance/payengine-conformance.yml
+- type: Packages
+  url: packages/payengine-packages.yml
+- type: SDKs
+  url: packages/payengine-packages.yml
+- type: LLMsTxt
+  url: llms/payengine-llms.txt
+- type: Authentication
+  url: authentication/payengine-authentication.yml
+- type: Conventions
+  url: conventions/payengine-conventions.yml
+- type: ErrorCatalog
+  url: errors/payengine-problem-types.yml
+- type: DeclineCodes
+  url: errors/payengine-decline-codes.yml
+- type: Lifecycle
+  url: lifecycle/payengine-lifecycle.yml
+- type: Sandbox
+  url: sandbox/payengine-sandbox.yml
+- type: Components
+  url: components/payengine-components.yml
+- type: DataModel
+  url: data-model/payengine-data-model.yml
+- type: Webhooks
+  url: asyncapi/payengine-webhooks.yml
+- type: Plans
+  url: plans/payengine-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/payengine-rate-limits.yml

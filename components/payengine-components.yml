@@ -1,0 +1,108 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs/getting-started-1/9.-available-web-components
+name: PayEngine embedded web components
+summary: >-
+  Embeddable UI is PayEngine's primary integration surface, not a secondary convenience.
+  The platform ships a custom-element library - every component is a <pay-engine> tag
+  configured by attributes - covering merchant onboarding, payment capture, transaction
+  management, disputes, reporting and gateway configuration. This is what lets a vertical
+  SaaS partner offer payments without building any of the UI or taking on PCI scope.
+element_name: pay-engine
+element_pattern: >-
+  <pay-engine id="elementID" merchant-id="<Merchant ID>" type="<component-type>"
+  ...component-specific attributes></pay-engine>
+loaders:
+- name: embed.js
+  url: https://console.payengine.co/js/1.0.0/embed.js
+  query_param: '?key=<Public API Key>'
+  description: Full web-component bundle. Registers every available <pay-engine> component type.
+  version: 1.0.0
+  pinned: true
+- name: securefields.min.js
+  url_pattern: https://<payengine-partner-server>/js/1.0.0/securefields.min.js
+  description: >-
+    Lightweight bundle optimised for SecureFields only. Docs recommend it for
+    applications that need just secure fields or Plaid, for faster load times.
+  version: 1.0.0
+  pinned: true
+- name: payengine.min.js
+  url_pattern: https://<payengine-partner-server>/js/wc/js/payengine.min.js
+  description: Web-component runtime bundle.
+families:
+- name: Merchant onboarding
+  description: >-
+    Embeddable onboarding forms that intercept sensitive merchant data (SSN, EIN) at
+    PayEngine's servers and return aliased values, keeping the partner out of scope.
+  components:
+  - type: onboarding
+    docs: https://docs.payengine.co/developer-docs/merchant-onboarding/embedded-onboarding-ui
+  styleguide: https://docs-api.payengine.co/ui-styleguide-specs/onboarding-web-component
+  styleguide_gated: true
+- name: Payment capture
+  description: Card and bank-account collection with tokenization.
+  components:
+  - type: securefields
+    description: >-
+      Hosted input fields for card and PII data. Values are tokenized before they reach
+      the partner's servers.
+    docs: https://docs.payengine.co/developer-docs/processing-payments/secure-fields
+  - type: securefields-bank-account
+    description: Hosted bank-account (ACH) field set.
+    docs: https://docs.payengine.co/developer-docs/processing-payments/secure-fields/securefields-bank-account
+  - type: credit-card-form
+    description: Prebuilt rendered card form (cardholder name, number, expiry, CVV).
+    docs: https://docs.payengine.co/developer-docs/processing-payments/credit-card-form
+    attributes:
+    - name: shouldProcess3ds
+      type: boolean
+      default: false
+      description: Optional. Enables 3-D Secure processing on the transaction.
+- name: Transactions and servicing
+  description: Merchant-facing operational widgets.
+  components:
+  - type: transactions
+    description: >-
+      Transaction list and detail widget. Honours the merchant session 'readonly' scope,
+      which hides the Refund button and disables Export.
+  - type: disputes
+  - type: reports
+- name: Gateway configuration
+  components:
+  - type: gateway-connect
+    description: >-
+      Connects a merchant to a specific gateway configuration.
+      <pay-engine type="gateway-connect" gateway-id="<GATEWAY-ID>">
+    docs: https://docs.payengine.co/developer-docs/orchestration-system/orchestration-overview
+- name: Hosted payments
+  description: >-
+    Payment links and a hosted checkout page - a full hosted surface rather than an
+    embedded element.
+  components:
+  - type: payment-link
+    docs: https://docs.payengine.co/developer-docs/processing-payments/hosted-payments
+  - type: accounting-web-component
+integration_notes:
+  frameworks:
+    docs: https://docs.payengine.co/developer-docs/getting-started-1/frontend-frameworks
+    spa_preloading: https://docs.payengine.co/developer-docs/getting-started-1/frontend-frameworks/preloading-web-components
+    note: Docs cover preloading the web component in single-page applications.
+  styling:
+    docs: https://docs.payengine.co/developer-docs/getting-started-1/styling-web-component
+    description: Custom styling of the web components is documented.
+  callbacks:
+    docs: https://docs.payengine.co/developer-docs/getting-started-1/8.-handling-callbacks-from-web-components
+    description: >-
+      Components emit DOM events the host page listens for - "our way of letting you know
+      when something interesting happens in web-components".
+  security:
+    description: >-
+      Components are authorized with a merchant session access token fetched server-side
+      via a fetchAccessToken callback, so the partner private key never reaches the
+      browser. HMAC-based securing is deprecated.
+    see: authentication/payengine-authentication.yml
+completeness_note: >-
+  The authoritative per-component attribute reference (UI styleguide specs) sits on
+  https://docs-api.payengine.co/, which requires a partner login. The families and types
+  above are those named in the open documentation; the list is not asserted to be
+  exhaustive.

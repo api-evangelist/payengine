@@ -64,5 +64,16 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-PayEngine is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+PayEngine is an embedded-payments and payment-facilitation platform for vertical market SaaS
+companies, operated by Platform Factory, Inc. Partners onboard sub-merchants, capture card and
+bank-account data through hosted SecureFields and a `<pay-engine>` web-component library, and
+process card and ACH payments with 3-D Secure, AVS, Level 2/3 interchange data, network
+tokenization, Tap to Pay and cloud-connected terminals. The platform is a PCI DSS Level 1
+certified Service Provider.
+
+- Website: https://www.payengine.co/
+- Developer docs: https://docs.payengine.co/developer-docs
+- API reference: https://docs-api.payengine.co/ (partner login required)
+- Status: https://status.payengine.co/
+- GitHub: https://github.com/payengine
+

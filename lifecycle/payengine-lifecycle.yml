@@ -1,0 +1,76 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs
+name: PayEngine API lifecycle
+summary: >-
+  PayEngine operates a public uptime status page and does deprecate features in writing,
+  but it publishes no API versioning scheme, no deprecation policy with notice periods,
+  no dated changelog and no SLA. Deprecations are announced inline in the affected
+  documentation page rather than through a policy or a Sunset/Deprecation header.
+versioning:
+  scheme: unstated
+  evidence: >-
+    No version path segment, version header or dated-version scheme appears in the public
+    developer docs. The only versioned artifacts are the CDN-pinned client assets
+    (/js/1.0.0/embed.js, /js/1.0.0/securefields.min.js).
+  current_version: null
+deprecation_policy:
+  published: false
+  notice_period: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  evidence: >-
+    No deprecation policy page exists. Deprecations are announced in the body of the page
+    documenting the affected feature, with no dated removal commitment.
+  observed_deprecations:
+  - subject: HMAC-based embedded-UI security
+    announced_in: https://docs.payengine.co/developer-docs/getting-started-1/securing-embedded-uis-merchant-session/securing-embeddable-uis
+    statement: >-
+      "HMAC-based security has been deprecated and will be removed in a future release.
+      To secure your web components, please refer to the Embedded UIs using merchant
+      session."
+    replacement: MerchantSession access token
+    removal_date: unpublished
+    backward_compatible: true
+  - subject: ACH_CREDIT_ISSUED webhook event
+    announced_in: https://docs.payengine.co/developer-docs/getting-started-1/10.-available-webhooks
+    statement: Listed in the webhook reference as "ACH_CREDIT_ISSUED (deprecated)".
+    removal_date: unpublished
+status_page:
+  published: true
+  url: https://status.payengine.co/
+  status: 200
+  checked: '2026-08-26'
+  provider: hosted status page
+  features:
+  - 90-day uptime calendar
+  - overall uptime for last 24 hours / 7 days / 30 days / 90 days
+  - status update history
+  - email subscription to updates
+  machine_readable_feed: not-found
+  note: >-
+    Uptime data is rendered client-side; no public JSON/RSS status endpoint was found at
+    the conventional paths.
+changelog:
+  published: false
+  evidence: >-
+    https://www.payengine.co/changelog returns HTTP 404 (checked 2026-08-26), and no
+    changelog, release-notes or "what's new" page appears in the docs navigation or in
+    llms.txt.
+sla:
+  published: false
+  note: >-
+    No uptime or support SLA is published on the public site. PayEngine's pricing is
+    contact-sales only, so any SLA is presumably contractual.
+support:
+  email: support@payengine.co
+  phone: '1-800-490-8514'
+  demo_request: https://www.payengine.co/demo-request
+certification_program:
+  published: true
+  url: https://docs.payengine.co/developer-docs/certification/partner-certification
+  description: >-
+    A published partner-certification suite listing the required integration, validation
+    and sanity test cases a partner must pass to verify their portal integration - an
+    unusual and useful lifecycle artifact.

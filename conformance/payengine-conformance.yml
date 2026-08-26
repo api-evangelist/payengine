@@ -1,0 +1,141 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  https://docs.payengine.co/developer-docs/processing-payments/pci-compliance and
+  https://www.payengine.co/security, both fetched 2026-08-26.
+name: PayEngine standards conformance
+summary: >-
+  PayEngine's headline conformance is PCI DSS Level 1 Service Provider certification,
+  assessed by an independent QSA and independently verifiable in Visa's Global Registry
+  of Service Providers under its legal entity, Platform Factory, Inc. Its payments stack
+  also implements the card-network standards a processor is judged on - EMV 3-D Secure,
+  AVS, Level 2/Level 3 interchange data, network tokenization and NFC contactless
+  acceptance. It conforms to none of the general web-API standards: no OAuth 2.0, no
+  OpenID Connect, no RFC 9457 problem details, no documented idempotency, no OpenAPI.
+entries:
+- id: pci-dss
+  name: PCI DSS Level 1 Service Provider
+  conforms: true
+  level: Level 1 Service Provider
+  evidence: >-
+    "This platform has undergone a comprehensive evaluation conducted by an independent
+    PCI Qualified Security Assessor (QSA) and has obtained certification as a PCI Level 1
+    Service Provider." Independently listed in the Visa Global Registry of Service
+    Providers as Platform Factory, Inc. (spId 4019).
+  evidence_url: https://docs.payengine.co/developer-docs/processing-payments/pci-compliance
+  third_party_verification: https://www.visa.com/splisting/viewSPDetail.do?spId=4019&coName=Platform%20Factory%2C%20Inc
+  assessor: Independent PCI Qualified Security Assessor (QSA)
+  scope_note: >-
+    PayEngine's SecureFields and hosted onboarding intercept cardholder and PII data
+    before it reaches the partner's servers, which is what lets partners reduce their own
+    PCI scope. Docs also explain SAQ eligibility limits for high-volume merchants
+    (6M+ Visa/Mastercard or 2.5M+ Amex transactions require a Report on Compliance).
+- id: emv-3ds
+  name: EMV 3-D Secure
+  conforms: true
+  evidence: >-
+    3DS is an explicitly supported flow, enabled per-transaction on the credit-card web
+    component via the shouldProcess3ds attribute (default false).
+  evidence_url: https://docs.payengine.co/developer-docs/processing-payments/3d-secure
+- id: avs
+  name: Address Verification Service (AVS)
+  conforms: true
+  evidence: >-
+    PayEngine publishes the complete AVS response-code table including Visa's retired
+    codes and their replacements. Enablement is via Customer Success, not self-serve.
+  evidence_url: https://docs.payengine.co/developer-docs/processing-payments/address-verification-service-avs-check
+  detail: errors/payengine-decline-codes.yml
+- id: level-2-3-interchange-data
+  name: Card-network Level 2 / Level 3 data
+  conforms: true
+  evidence: >-
+    Documented support for passing Level 2 (Business, Corporate, Purchasing cards) and
+    Level 3 (Corporate and Purchasing only) commercial-card data to qualify for lower
+    interchange rates.
+  evidence_url: https://docs.payengine.co/developer-docs/processing-payments/level2
+- id: network-tokenization
+  name: Card-network tokenization
+  conforms: true
+  evidence: >-
+    Automatic Network Tokenization is a documented platform capability, alongside a
+    documented token migration process for inbound partners leaving another provider.
+  evidence_url: https://docs.payengine.co/developer-docs/tokenization/automatic-network-tokenization
+- id: card-account-updater
+  name: Card Account Updater
+  conforms: true
+  evidence: Documented as a platform capability for keeping stored credentials current.
+  evidence_url: https://docs.payengine.co/developer-docs/card-account-updater
+- id: contactless-wallets
+  name: Apple Pay / Google Pay / PayPal acceptance
+  conforms: true
+  evidence: >-
+    Dedicated integration guides for Apple Pay (web and native), Google Pay and PayPal,
+    plus Tap to Pay on iPhone via the SoftPOS Swift package.
+  evidence_url: https://docs.payengine.co/developer-docs/processing-payments/apple-pay
+- id: ach-nacha
+  name: ACH / bank-account payments
+  conforms: partial
+  evidence: >-
+    ACH sale and ACH refund are supported, with micro-deposit bank-account verification
+    and Plaid-based instant account linking. NACHA conformance is not claimed in writing.
+  evidence_url: https://docs.payengine.co/developer-docs/processing-payments/connect-with-plaid
+- id: hmac-sha256-webhook-signing
+  name: HMAC-SHA256 signed webhooks with timestamp
+  conforms: true
+  evidence: >-
+    Every webhook carries an X-PF-Signature header with t=<timestamp>,s=<hmac-sha256>
+    over "<timestamp>.<raw body>", keyed with a per-endpoint secret.
+  evidence_url: https://docs.payengine.co/developer-docs/webhooks/check-signature
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    No authorization server, no token endpoint, no scope surface. Server-to-server auth
+    is HTTP Basic with a private key. /.well-known/oauth-authorization-server missed on
+    every host.
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404/400 on every PayEngine host (2026-08-26).
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Errors return a flat {"error":true,"message":"..."} JSON body, not
+    application/problem+json. Observed live on https://api.payengine.co/.
+- id: idempotency
+  name: Idempotent write semantics
+  conforms: false
+  evidence: >-
+    No idempotency key, header or replay guarantee appears anywhere in PayEngine's public
+    documentation.
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document is served on any PayEngine host. The API reference is
+    behind a partner login and the public docs state the spec is "provided from within
+    your partner portal".
+- id: rfc8594
+  name: RFC 8594 Sunset header
+  conforms: false
+  evidence: Deprecations are announced in prose; no Sunset or Deprecation header is documented.
+domain_standard:
+  market: Payments / merchant acquiring
+  declared: partial
+  finding: >-
+    PayEngine's contract is not public, so no domain-standard signature could be read
+    from a spec. What IS verifiable from the docs is the card-network standards stack -
+    PCI DSS Level 1, EMV 3DS, AVS, Level 2/3 interchange data and network tokenization -
+    plus ISO 8583-style two-digit response codes (00 approved, 01 referral, 05 decline,
+    06 error) surfaced verbatim in transaction payloads. No ISO 20022, X12 or EDIFACT
+    message shapes are exposed.
+  iso8583_response_codes:
+    observed: true
+    note: >-
+      responseCode / hostResponseCode values follow the ISO 8583 convention. PayEngine
+      does not name the standard itself; the mapping is recorded as observed, not claimed.
+  no_penalty_note: >-
+    Reward-only dimension. Nothing is invented to fill this slot - the absence of a
+    published contract means the strongest domain-standard evidence available is the
+    compliance and card-network stack above.

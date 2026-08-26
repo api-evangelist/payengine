@@ -1,0 +1,115 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs/webhooks
+name: PayEngine webhook event catalog
+summary: >-
+  PayEngine ships a documented, signed webhook surface covering merchant onboarding,
+  gateway configuration, transaction processing, payment links, subscriptions, settlement
+  batches and dispute management. It publishes no AsyncAPI document - this catalog is the
+  webhook surface transcribed from the public developer docs, with a full sample JSON
+  payload published for every event.
+asyncapi_spec_published: false
+asyncapi_probe:
+  note: >-
+    No AsyncAPI document is served on any PayEngine host, and none is referenced anywhere
+    in the public docs or llms.txt. Recorded as absent, not fabricated.
+transport: https-webhook
+envelope:
+  shape: >-
+    Every event is a flat JSON object with a stable three-key envelope: event_uid (unique
+    delivery id), event (the event name), and data (the event-specific body).
+  fields:
+  - name: event_uid
+    type: string
+    description: Opaque hex identifier unique to this event delivery.
+  - name: event
+    type: string
+    description: The event name, SCREAMING_SNAKE_CASE.
+  - name: data
+    type: object
+    description: Event-specific payload. Onboarding and transaction events both carry account_id and merchant_id.
+security:
+  signed: true
+  header: X-PF-Signature
+  algorithm: HMAC-SHA256
+  scheme: >-
+    The header carries a timestamp and a signature as comma-separated prefixed pairs -
+    t=<unix-timestamp>, s=<hex-digest>. The signed_payload is the timestamp, a literal
+    ".", then the raw JSON request body. HMAC-SHA256 it with the endpoint's signing
+    secret and compare.
+  secret_scope: >-
+    A unique signing secret is generated per endpoint, so a partner running multiple
+    endpoints must verify each against its own secret.
+  docs: https://docs.payengine.co/developer-docs/webhooks/check-signature
+  build_endpoint_docs: https://docs.payengine.co/developer-docs/webhooks/build-a-webhook-endpoint
+event_count: 37
+categories:
+- name: Onboarding
+  description: Merchant creation, status transitions, e-signature, and bank-account micro-deposit verification.
+  events:
+  - MERCHANT_CREATED
+  - MERCHANT_UPDATED
+  - MERCHANT_STATUS_CHANGED
+  - MERCHANT_FEE_UPDATED
+  - FEE_SCHEDULE_UPDATED
+  - MERCHANT_SIGNING_COMPLETED
+  - MERCHANT_SIGNING_CANCELLED
+  - MERCHANT_SIGNING_DECLINED
+  - MICRO_DEPOSIT_INITIATED
+  - MICRO_DEPOSIT_READY_FOR_VERIFICATION
+  - MICRO_DEPOSIT_VERIFIED
+  - MICRO_DEPOSIT_VERIFICATION_FAILED
+- name: Gateway
+  description: Gateway configuration lifecycle for a merchant - useful for keeping partner systems in sync when a gateway is enabled, disabled or reconfigured.
+  events:
+  - GATEWAY_CREATED
+  - GATEWAY_UPDATED
+  - GATEWAY_DELETED
+- name: Transactions
+  description: Card and ACH authorization, capture, sale, void, refund, failure, offline and device-present flows.
+  events:
+  - PAYMENT_AUTH
+  - PAYMENT_SALE
+  - PAYMENT_CAPTURED
+  - PAYMENT_CAPTURE_FAILED
+  - PAYMENT_VOIDED
+  - PAYMENT_REFUNDED
+  - PAYMENT_FAILED
+  - PAYMENT_ACH
+  - PAYMENT_ACH_REFUNDED
+  - OFFLINE_SALE
+  - DEVICE_SALE_CANCEL
+  - ADJUSTMENT_RECEIVED
+- name: Payment Links
+  description: Hosted payment link lifecycle.
+  events:
+  - PAYMENTLINK_CREATED
+  - PAYMENTLINK_UPDATED
+  - PAYMENTLINK_CANCELLED
+- name: Subscriptions
+  description: Recurring subscription lifecycle.
+  events:
+  - SUBSCRIPTION_CREATED
+  - SUBSCRIPTION_UPDATED
+  - SUBSCRIPTION_CANCELLED
+- name: Batch and settlement
+  description: Settlement batch generation and payout notification.
+  events:
+  - BATCH_GENERATED
+  - PAYOUT_GENERATED
+- name: Dispute management
+  description: Chargeback and retrieval-request notifications.
+  events:
+  - DISPUTE_CREATED
+  - DISPUTE_INFORMATION_UPDATED
+deprecated_events:
+- name: ACH_CREDIT_ISSUED
+  status: deprecated
+  note: Marked "(deprecated)" in the published webhook reference.
+notes:
+- >-
+  Webhook management is a console function, not an API one - the permissions matrix in
+  the docs grants "Manage Webhooks" to Admin and Developer roles in the partner console.
+- >-
+  Every documented event ships with a full sample JSON payload in the public docs, which
+  is unusually complete for a provider whose API reference itself is login-gated.

@@ -1,0 +1,83 @@
+# Developer Docs
+
+## Developer Docs
+
+- [Overview](https://docs.payengine.co/developer-docs/master.md): Payments Platform Documentation
+- [Integration Options](https://docs.payengine.co/developer-docs/integration-options.md)
+- [Webhooks](https://docs.payengine.co/developer-docs/webhooks.md): Listen for events on your account so your integration can automatically trigger reactions
+- [Build a webhook endpoint](https://docs.payengine.co/developer-docs/webhooks/build-a-webhook-endpoint.md): Write the code that properly handles webhook notifications.
+- [Check signature](https://docs.payengine.co/developer-docs/webhooks/check-signature.md): Verify the events that the platform sends to your webhook endpoints.
+- [1. Creating User Accounts](https://docs.payengine.co/developer-docs/getting-started-1/getting-started.md)
+- [2. User Account Types & Permissions](https://docs.payengine.co/developer-docs/getting-started-1/2.-user-account-types-and-permissions.md)
+- [3. Generate Access Tokens](https://docs.payengine.co/developer-docs/getting-started-1/generate-access-tokens.md)
+- [4. Choose Integration Options](https://docs.payengine.co/developer-docs/getting-started-1/choose-integration-options.md)
+- [5. Securing Embedded UIs](https://docs.payengine.co/developer-docs/getting-started-1/securing-embedded-uis-merchant-session.md)
+- [5a. Securing Embedded UIs Using HMAC (deprecated)](https://docs.payengine.co/developer-docs/getting-started-1/securing-embedded-uis-merchant-session/securing-embeddable-uis.md)
+- [6. Loading the frontend library](https://docs.payengine.co/developer-docs/getting-started-1/frontend-frameworks.md)
+- [6a. Preloading PayEngine Web-Component in SPA](https://docs.payengine.co/developer-docs/getting-started-1/frontend-frameworks/preloading-web-components.md)
+- [7. Custom styling the Web-Components](https://docs.payengine.co/developer-docs/getting-started-1/styling-web-component.md)
+- [8. Handling Callbacks from Web-Components](https://docs.payengine.co/developer-docs/getting-started-1/8.-handling-callbacks-from-web-components.md): Events are our way of letting you know when something interesting happens in web-components.
+- [9. Available Web-Components](https://docs.payengine.co/developer-docs/getting-started-1/9.-available-web-components.md)
+- [10. Available Webhooks](https://docs.payengine.co/developer-docs/getting-started-1/10.-available-webhooks.md)
+- [Overview](https://docs.payengine.co/developer-docs/merchant-onboarding/overview.md)
+- [Integration Options](https://docs.payengine.co/developer-docs/merchant-onboarding/introduction.md)
+- [Onboarding/Payments Application Workflow](https://docs.payengine.co/developer-docs/merchant-onboarding/onboarding-payments-application-workflow.md)
+- [Embedded Onboarding UI](https://docs.payengine.co/developer-docs/merchant-onboarding/embedded-onboarding-ui.md)
+- [Merchant onboarding APIs](https://docs.payengine.co/developer-docs/merchant-onboarding/merchant-onboarding-apis.md): This guide provides steps to use APIs to onboard and optionally auto submit the application for underwriting immediately.
+- [Partner's Onboarding UI](https://docs.payengine.co/developer-docs/merchant-onboarding/onboarding-ui.md)
+- [Merchant Lifecycle](https://docs.payengine.co/developer-docs/merchant-onboarding/merchant-lifecycle.md)
+- [Onboarding to Partner Relationships](https://docs.payengine.co/developer-docs/merchant-onboarding/onboarding-to-partner-relationships.md): Onboarding Merchants to Partner Processor/Gateway Relationships
+- [Introduction](https://docs.payengine.co/developer-docs/processing-payments/introduction.md)
+- [Transaction Flow and Status](https://docs.payengine.co/developer-docs/processing-payments/introduction/transaction-flow-and-status.md)
+- [SecureFields JS](https://docs.payengine.co/developer-docs/processing-payments/secure-fields.md)
+- [SecureFields Bank Account](https://docs.payengine.co/developer-docs/processing-payments/secure-fields/securefields-bank-account.md)
+- [Using tokens](https://docs.payengine.co/developer-docs/processing-payments/secure-fields/using-tokens.md)
+- [Credit Card Form](https://docs.payengine.co/developer-docs/processing-payments/credit-card-form.md)
+- [Connect with Plaid](https://docs.payengine.co/developer-docs/processing-payments/connect-with-plaid.md)
+- [Connect Mailgun](https://docs.payengine.co/developer-docs/processing-payments/connect-mailgun.md)
+- [3D Secure](https://docs.payengine.co/developer-docs/processing-payments/3d-secure.md)
+- [Payments API](https://docs.payengine.co/developer-docs/processing-payments/payments-api.md)
+- [Searching Transactions](https://docs.payengine.co/developer-docs/processing-payments/searching-transactions.md)
+- [Registering a cloud connected device](https://docs.payengine.co/developer-docs/processing-payments/registering-a-cloud-connected-device.md): This guide provides step by step instructions to activate cloud connected payment devices
+- [Apple Pay](https://docs.payengine.co/developer-docs/processing-payments/apple-pay.md)
+- [Apple Pay in your native app](https://docs.payengine.co/developer-docs/processing-payments/apple-pay/apple-pay-in-your-native-app.md)
+- [Google Pay™](https://docs.payengine.co/developer-docs/processing-payments/google-pay-tm.md)
+- [PayPal™](https://docs.payengine.co/developer-docs/processing-payments/paypal.md)
+- [Level 2 and Level 3 Data](https://docs.payengine.co/developer-docs/processing-payments/level2.md): The more data you pass with a commercial transaction, the lower the interchange fees that apply to that transaction.
+- [Fraud Prevention](https://docs.payengine.co/developer-docs/processing-payments/fraud-prevention.md)
+- [Reporting](https://docs.payengine.co/developer-docs/processing-payments/reporting.md): The reporting options below are designed to supply crucial data and analytics, enabling you to strategically optimize your operations and enhance your partnership with us.
+- [PCI Compliance](https://docs.payengine.co/developer-docs/processing-payments/pci-compliance.md): A note on PCI Compliance for merchants
+- [Address Verification Service (AVS) Check](https://docs.payengine.co/developer-docs/processing-payments/address-verification-service-avs-check.md)
+- [Hosted Payments](https://docs.payengine.co/developer-docs/processing-payments/hosted-payments.md)
+- [Embedded Payments Session Integration](https://docs.payengine.co/developer-docs/processing-payments/hosted-payments/embedded-payments-session-integration.md)
+- [Tap to Pay](https://docs.payengine.co/developer-docs/processing-payments/tap-to-pay.md)
+- [Card Account Updater](https://docs.payengine.co/developer-docs/card-account-updater.md)
+- [Surcharge](https://docs.payengine.co/developer-docs/surcharge.md)
+- [Orchestration Overview](https://docs.payengine.co/developer-docs/orchestration-system/orchestration-overview.md)
+- [Onboarding Orchestration](https://docs.payengine.co/developer-docs/orchestration-system/onboarding-orchestration.md)
+- [Transactions Orchestration](https://docs.payengine.co/developer-docs/orchestration-system/transactions-orchestration.md)
+- [Omnicommerce Orchestration](https://docs.payengine.co/developer-docs/orchestration-system/omnicommerce-orchestration.md)
+- [Merchant Servicing](https://docs.payengine.co/developer-docs/orchestration-system/merchant-servicing.md)
+- [Universal Reporting](https://docs.payengine.co/developer-docs/orchestration-system/universal-reporting.md)
+- [Automatic Network Tokenization](https://docs.payengine.co/developer-docs/tokenization/automatic-network-tokenization.md)
+- [Token Migration Process](https://docs.payengine.co/developer-docs/tokenization/token-migration.md)
+- [Retrieval Requests & Chargebacks](https://docs.payengine.co/developer-docs/dispute-management/retrieval-requests-and-chargebacks.md): The Interplay of Chargebacks and Retrieval Requests in Credit Card Networks
+- [Partner Certification](https://docs.payengine.co/developer-docs/certification/partner-certification.md): This certification suite provides a list of all required integration, validation, and sanity test cases to verify partners' portal integration.
+- [Secure Data Sharing with PayEngine](https://docs.payengine.co/developer-docs/data-sharing/secure-data-sharing-with-payengine.md)
+- [PayEngine Payment Gateway for WooCommerce](https://docs.payengine.co/developer-docs/ecommerce-integration/payengine-payment-gateway-for-woocommerce.md)
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://docs.payengine.co/developer-docs/master.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

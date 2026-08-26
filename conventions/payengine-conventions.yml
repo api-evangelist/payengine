@@ -1,0 +1,192 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs
+name: PayEngine cross-cutting API conventions
+summary: >-
+  Runtime semantics for the PayEngine platform, read from the public developer docs. The
+  strong signals here are a per-endpoint HMAC-signed webhook envelope and an explicitly
+  stated reversal model tied to the settlement batch. The notable gaps are idempotency
+  and rate limiting - neither word appears anywhere in PayEngine's 368KB of public
+  documentation, and the REST reference that might document them is login-gated.
+scope_note: >-
+  Derived from the public developer docs only. PayEngine's API reference
+  (https://docs-api.payengine.co/) requires a partner login, so request/response-level
+  conventions that are documented only there could not be read.
+auth_style:
+  summary: HTTP Basic with a partner private key for server-to-server; public key plus short-lived merchant session token for embedded UI.
+  see: authentication/payengine-authentication.yml
+idempotency:
+  supported: unknown
+  evidence: >-
+    The string "idempoten" does not occur anywhere in PayEngine's public documentation
+    (checked across the full llms-full.txt docs dump, 368,174 bytes, 2026-08-26). No
+    Idempotency-Key header, no client-supplied request key, and no replay semantics are
+    described.
+  header: null
+  retention: null
+  risk: >-
+    On a card-present and card-not-present payments API this is the single most
+    consequential undocumented convention: an agent or a retrying client has no published
+    way to make a sale, capture or refund safe to repeat.
+  pointer_emitted: false
+  pointer_withheld_reason: >-
+    No Idempotency pointer is wired into apis.yml. Emitting one would credit PayEngine
+    with a guarantee its public docs do not make.
+pagination:
+  style: unknown
+  evidence: >-
+    Transaction search is documented as a capability ("Searching Transactions") but the
+    request/response parameters live behind the gated API reference. No page/cursor/limit
+    convention is stated publicly.
+  docs: https://docs.payengine.co/developer-docs/processing-payments/searching-transactions
+field_expansion:
+  supported: unknown
+metadata:
+  supported: partial
+  fields:
+  - name: external_id
+    description: >-
+      Partner-supplied identifier carried on merchant records and echoed back in the
+      MERCHANT_UPDATED webhook payload.
+  - name: invoiceNumber
+    description: Partner-supplied invoice reference visible on transaction receipts.
+  - name: description
+    description: Free-text transaction description, printed on customer and merchant receipts.
+request_id_tracing:
+  supported: partial
+  fields:
+  - name: event_uid
+    surface: webhook
+    description: Unique identifier on every webhook delivery, usable for de-duplication of inbound events.
+  - name: transactionId
+    surface: transaction response
+    description: Processor transaction identifier returned on sale/auth/capture/void/refund.
+  note: >-
+    No request-correlation header (X-Request-Id or equivalent) is documented for outbound
+    REST calls.
+versioning:
+  api_versioning: unstated
+  evidence: >-
+    No version segment, version header or dated-version scheme is described in the public
+    docs. The only versioned surfaces are the client assets, which are pinned in their
+    CDN paths (/js/1.0.0/embed.js, /js/1.0.0/securefields.min.js).
+  deprecations_observed:
+  - subject: HMAC-based embedded-UI security
+    status: deprecated, backward compatible, removal date unpublished
+  - subject: ACH_CREDIT_ISSUED webhook event
+    status: deprecated
+error_envelope:
+  api_errors:
+    shape: '{"error": true, "message": "<human-readable string>"}'
+    evidence: >-
+      Observed directly on https://api.payengine.co/ (HTTP 400, 2026-08-26), which returns
+      {"error":true,"message":"Unsupported API call. Please see API specifications at
+      https://docs-api.payengine.co/"}. This is a flat boolean+message envelope, not
+      RFC 9457 application/problem+json.
+    rfc9457: false
+  transaction_results:
+    shape: >-
+      Transaction outcomes are not HTTP errors. A declined or failed transaction returns a
+      transaction object carrying status (e.g. FAIL), responseCode, hostResponseCode and
+      hostSystemMessage. See errors/payengine-decline-codes.yml.
+  see: errors/payengine-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  headers: []
+  evidence: >-
+    The string "rate limit" does not occur anywhere in PayEngine's public documentation.
+    No X-RateLimit-*, RateLimit-* or Retry-After convention is published, and no 429
+    behaviour is described.
+  see: rate-limits/payengine-rate-limits.yml
+dry_run_mode:
+  supported: false
+  substitute: >-
+    PayEngine does not offer a dry-run flag; it offers a separate Sandbox account with
+    its own credentials in which every call is real but non-settling. See
+    sandbox/payengine-sandbox.yml.
+reversibility:
+  grade: verified
+  summary: >-
+    PayEngine publishes both a reversal path and the window that governs it, and the
+    window is stated in operational terms an agent can actually evaluate: the settlement
+    batch boundary decides whether a transaction can be voided or must be refunded.
+  write_surface: true
+  operations:
+  - action: sale
+    reversal: void
+    window: >-
+      From the moment the sale is processed until the current day's batch closes. Docs:
+      "When the transaction sale is initiated, it will be processed and added to the
+      current day's batch. At this stage, this transaction can be voided."
+    window_stated: true
+    docs: https://docs.payengine.co/developer-docs/processing-payments/introduction/transaction-flow-and-status
+    reversal_docs: https://docs.payengine.co/api-reference/transactions/void
+    webhook: PAYMENT_VOIDED
+  - action: sale
+    reversal: refund
+    window: >-
+      After batch close / settlement, void is no longer available and refund is the only
+      reversal. Docs: "Once the batch is closed, the settlement process will be initiated
+      and settled subsequently. After the transaction is settled or batch closed, it can
+      be only refunded."
+    window_stated: true
+    docs: https://docs.payengine.co/developer-docs/processing-payments/introduction/transaction-flow-and-status
+    webhook: PAYMENT_REFUNDED
+    note: >-
+      PayEngine publishes no maximum age for a refund (no "within N days" limit is stated
+      in the public docs). Only the lower bound - settlement - is documented.
+  - action: authorization
+    reversal: void
+    window: >-
+      An auth holds funds but does not settle until captured separately, so it can be
+      voided until it is captured and its capture is batched.
+    window_stated: true
+    docs: https://docs.payengine.co/developer-docs/processing-payments/introduction/transaction-flow-and-status
+  - action: capture
+    reversal: void-then-refund
+    window: >-
+      A capture follows the same flow as a sale - it joins the current day's batch, so it
+      is voidable until batch close and refundable after.
+    window_stated: true
+  - action: ACH sale
+    reversal: refund
+    window: null
+    window_stated: false
+    webhook: PAYMENT_ACH_REFUNDED
+    note: No ACH-specific reversal window is stated in the public docs.
+  - action: device sale (card present / Tap to Pay)
+    reversal: cancel
+    window: >-
+      Cancellable at the device during the transaction; a cancellation raises
+      DEVICE_SALE_CANCEL and PAYMENT_FAILED.
+    window_stated: false
+  - action: payment link
+    reversal: cancel
+    window: null
+    window_stated: false
+    webhook: PAYMENTLINK_CANCELLED
+  - action: subscription
+    reversal: cancel
+    window: null
+    window_stated: false
+    webhook: SUBSCRIPTION_CANCELLED
+  - action: merchant onboarding signature
+    reversal: decline / cancel
+    window: Before the merchant completes e-signature.
+    window_stated: true
+    webhook: MERCHANT_SIGNING_DECLINED, MERCHANT_SIGNING_CANCELLED
+  not_reversible:
+  - action: merchant creation
+    note: No merchant-delete operation is documented; merchants move through status states instead.
+  caveat: >-
+    Reversal operation names are taken from the public transaction-flow guide and the
+    webhook reference. Exact operationIds and request shapes live in the gated API
+    reference and were not read, so none are asserted here.
+cross_links:
+  errors: errors/payengine-problem-types.yml
+  decline_codes: errors/payengine-decline-codes.yml
+  lifecycle: lifecycle/payengine-lifecycle.yml
+  authentication: authentication/payengine-authentication.yml
+  rate_limits: rate-limits/payengine-rate-limits.yml
+  webhooks: asyncapi/payengine-webhooks.yml
+  sandbox: sandbox/payengine-sandbox.yml

@@ -1,0 +1,97 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs/getting-started-1/generate-access-tokens
+name: PayEngine authentication profile
+summary: >-
+  PayEngine uses a three-credential model rather than a single API key. A private
+  (secret) key authenticates server-to-server REST calls over HTTP Basic; a public key
+  identifies the partner to browser-loaded web components; and a short-lived merchant
+  session access token, minted server-side from the private key, scopes an embedded
+  widget to one merchant. There is no OAuth 2.0 authorization server and no OpenID
+  Connect discovery document on any PayEngine host, so scopes/ is deliberately not
+  emitted for this provider.
+derived_from_openapi: false
+derived_from_openapi_reason: >-
+  PayEngine publishes no public OpenAPI. The API reference at https://docs-api.payengine.co/
+  is behind a "PayEngine Docs Login", and the public docs state the spec is "provided from
+  within your partner portal". This profile was read from the public getting-started and
+  security guides instead.
+schemes:
+- id: partner_private_key
+  type: http
+  scheme: basic
+  in: header
+  header: Authorization
+  format: 'Authorization: Basic <partner_private_token>'
+  description: >-
+    The private (secret) API key, presented as an HTTP Basic credential. Can make any API
+    call on behalf of the partner account.
+  handling: >-
+    Docs state the private key is shown only once at creation and is redacted by the
+    dashboard afterwards - if lost it cannot be recovered and must be rotated. Docs
+    explicitly warn it must be kept out of version control and never exposed client-side.
+  issued_via: Partner console, Settings > API Keys
+  roles_permitted: [Admin, Developer]
+- id: partner_public_key
+  type: apiKey
+  in: query
+  name: key
+  format: '<loader-url>/js/1.0.0/embed.js?key=<Public API Key>'
+  description: >-
+    The public key identifies the partner to the browser-side web-component loader and
+    SecureFields JS. Safe to expose client-side; carries no ability to call the REST API.
+- id: merchant_session_token
+  type: http
+  scheme: bearer
+  description: >-
+    A short-lived access token obtained server-side using the partner private key and
+    handed to the browser through a fetchAccessToken callback. Scopes an embedded widget
+    to a single merchant, so the private key never reaches the client.
+  scope_parameter:
+    name: scope
+    values: [readonly]
+    effect: >-
+      Setting scope to 'readonly' restricts actions inside the embedded widgets - it
+      hides the Refund button in the Transactions widget and disables Export.
+  docs: https://docs.payengine.co/developer-docs/getting-started-1/securing-embedded-uis-merchant-session
+  status: current
+- id: hmac_web_component_auth
+  type: hmac
+  algorithm: HMAC-SHA256
+  description: >-
+    Legacy scheme for securing embedded UIs - an HMAC-SHA256 over the merchant id keyed
+    with the partner's private key, generated at user login.
+  status: deprecated
+  deprecation_note: >-
+    Docs state HMAC-based security "has been deprecated and will be removed in a future
+    release", and recommend migrating to MerchantSession. Backward compatibility is
+    maintained in the interim. No removal date is published.
+  docs: https://docs.payengine.co/developer-docs/getting-started-1/securing-embedded-uis-merchant-session/securing-embeddable-uis
+oauth2: false
+openid_connect: false
+mutual_tls: false
+mfa:
+  console_2fa: true
+  note: The console permissions matrix lists 2FA as available to Admin, User and Developer roles.
+roles:
+  model: Three fixed console roles gate credential and webhook management.
+  values:
+  - name: Admin
+    api_keys: true
+    webhooks: true
+    embedded_widget: true
+  - name: User
+    api_keys: false
+    webhooks: false
+    embedded_widget: false
+  - name: Developer
+    api_keys: true
+    webhooks: true
+    embedded_widget: true
+  docs: https://docs.payengine.co/developer-docs/getting-started-1/2.-user-account-types-and-permissions
+key_environments:
+  test_prefix: pk_test_
+  note: >-
+    Public test keys are shown in the docs as pk_test_xxx. The docs describe a distinct
+    Sandbox account rather than a prefix-switched key on one account; see
+    sandbox/payengine-sandbox.yml.

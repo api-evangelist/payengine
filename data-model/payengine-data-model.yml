@@ -1,0 +1,167 @@
+generated: '2026-08-26'
+method: derived
+source: >-
+  Derived from the webhook payload samples and object descriptions in the public
+  developer docs (https://docs.payengine.co/developer-docs), captured in
+  asyncapi/payengine-webhooks.yml. NOT derived from an OpenAPI - PayEngine publishes none.
+name: PayEngine entity graph
+summary: >-
+  PayEngine's data model is a two-level tenancy - a partner Account owns Merchants, and
+  everything transactional hangs off a Merchant. Every webhook payload in the public docs
+  carries both account_id and merchant_id, which is the clearest evidence of that shape.
+  Identifiers are UUIDs across the board, except tokens, which are prefixed and
+  environment-tagged (card_sandbox_*, ba_sandbox_*).
+derivation_note: >-
+  Entities and relationships below are only those visible in published payloads and
+  documentation prose. Field-level schemas live behind the gated API reference and are
+  not asserted here. Relationships marked inferred: true are read from co-occurring
+  identifiers in sample payloads rather than from a stated schema.
+id_conventions:
+  primary: UUID v4
+  evidence: >-
+    id, account_id, merchant_id, bank_account_id and fee_schedule_id all appear as UUIDs
+    in published webhook samples.
+  prefixed_ids:
+  - prefix: card_sandbox_
+    entity: CardToken
+    environment: sandbox
+  - prefix: ba_sandbox_
+    entity: BankAccount token
+    environment: sandbox
+  - prefix: pk_test_
+    entity: public API key
+    environment: test
+  opaque:
+  - field: event_uid
+    format: 32-char hex
+    entity: WebhookEvent
+entities:
+- name: Account
+  description: The partner (vertical SaaS platform) tenant. Root of the ownership tree.
+  key: account_id
+- name: Merchant
+  description: >-
+    A sub-merchant onboarded by the partner. Carries onboarding status, capabilities and
+    a fee schedule.
+  key: merchant_id
+  fields_observed: [id, account_id, external_id, status, capabilities, fee_schedule_id, old_fee_schedule_id]
+  status_values_observed: [in_review, Declined, Active]
+  capability_values_observed: [cc, ach]
+- name: OnboardingApplication
+  description: >-
+    The underwriting application for a merchant - created, validated, optionally
+    auto-submitted, transmitted to a processor, and e-signed.
+  lifecycle_docs: https://docs.payengine.co/developer-docs/merchant-onboarding/merchant-lifecycle
+- name: BankAccount
+  description: Merchant bank account, verified by micro-deposit or linked instantly via Plaid.
+  key: bank_account_id
+- name: FeeSchedule
+  description: Pricing applied to a merchant. Changes are versioned by webhook (new + previous id).
+  key: fee_schedule_id
+- name: Gateway
+  description: >-
+    A processor/gateway configuration attached to a merchant. Central to the
+    orchestration system, which routes across multiple gateways.
+  key: gateway_id
+- name: Transaction
+  description: >-
+    A card or ACH authorization, sale, capture, void, refund, offline sale or device sale.
+  fields_observed: [transactionId, status, responseCode, hostResponseCode, hostSystemMessage, maskedCardNumber, customerReceipt, merchantReceipt, env]
+- name: CardToken
+  description: >-
+    Reusable card-on-file token produced by SecureFields. Subject to a configurable Card
+    Token Expiration Policy and to Card Account Updater refreshes.
+- name: Batch
+  description: >-
+    Daily settlement batch. The batch boundary is what decides void-vs-refund; see the
+    reversibility block in conventions/payengine-conventions.yml.
+- name: Payout
+  description: Funds disbursement to the merchant, subject to processor adjustments.
+- name: Dispute
+  description: Chargeback or retrieval request raised against a transaction.
+- name: PaymentLink
+  description: Hosted payment link for a fixed amount, or a hosted checkout page for an open amount.
+- name: Subscription
+  description: Recurring billing arrangement.
+- name: Device
+  description: Cloud-connected payment terminal (PAX) or Tap to Pay endpoint registered to a merchant.
+- name: WebhookEndpoint
+  description: Partner-registered callback URL with its own HMAC signing secret.
+- name: User
+  description: Console user with an Admin, User or Developer role.
+relationships:
+- from: Account
+  to: Merchant
+  type: has_many
+  via: account_id
+- from: Account
+  to: User
+  type: has_many
+- from: Account
+  to: WebhookEndpoint
+  type: has_many
+- from: Merchant
+  to: Account
+  type: belongs_to
+  via: account_id
+- from: Merchant
+  to: OnboardingApplication
+  type: has_one
+- from: Merchant
+  to: BankAccount
+  type: has_many
+  via: bank_account_id
+- from: Merchant
+  to: FeeSchedule
+  type: has_one
+  via: fee_schedule_id
+- from: Merchant
+  to: Gateway
+  type: has_many
+  via: gateway_id
+- from: Merchant
+  to: Transaction
+  type: has_many
+  via: merchant_id
+- from: Merchant
+  to: Device
+  type: has_many
+- from: Merchant
+  to: PaymentLink
+  type: has_many
+- from: Merchant
+  to: Subscription
+  type: has_many
+- from: Transaction
+  to: CardToken
+  type: has_one
+  via: token
+- from: Transaction
+  to: Gateway
+  type: belongs_to
+  inferred: true
+- from: Transaction
+  to: Batch
+  type: belongs_to
+  note: A sale or capture joins the current day's batch on creation.
+- from: Transaction
+  to: Dispute
+  type: has_many
+- from: Batch
+  to: Payout
+  type: has_one
+  inferred: true
+- from: CardToken
+  to: BankAccount
+  type: sibling
+  note: SecureFields produces both card tokens and bank-account tokens from the same flow.
+- from: WebhookEndpoint
+  to: WebhookEvent
+  type: has_many
+  via: event_uid
+gaps:
+- >-
+  No field-level schema is public. Types, required-ness, enum ranges and max lengths are
+  all behind the partner-login API reference.
+- >-
+  No JSON Schema, no $ref graph, and no object reference page on the open docs host.

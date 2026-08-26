@@ -1,0 +1,82 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Live probe of https://api.payengine.co/ (HTTP 400, 2026-08-26) plus the transaction
+  response payloads published at https://docs.payengine.co/developer-docs
+name: PayEngine error model
+summary: >-
+  PayEngine runs two distinct failure channels. Protocol-level failures return a flat
+  {"error": true, "message": "..."} JSON envelope with a 4xx status. Business-level
+  failures - a declined card, a failed capture - are NOT HTTP errors: they return HTTP
+  success carrying a transaction object whose status, responseCode, hostResponseCode and
+  hostSystemMessage describe the outcome. A client that only checks HTTP status will read
+  a declined payment as a successful call.
+format: custom-json
+rfc9457: false
+rfc9457_evidence: >-
+  No application/problem+json media type, no type/title/detail/instance members. The
+  envelope observed live carries only "error" (boolean) and "message" (string).
+derived_from_openapi: false
+derived_from_openapi_reason: >-
+  PayEngine publishes no public OpenAPI; the API reference at https://docs-api.payengine.co/
+  requires a partner login, so the per-operation 4xx/5xx response catalog could not be
+  enumerated. Only errors observable without credentials are recorded.
+envelope:
+  media_type: application/json
+  fields:
+  - name: error
+    type: boolean
+    description: Always true on an error response.
+  - name: message
+    type: string
+    description: Human-readable description. Not a stable machine-readable code.
+  machine_readable_code: false
+  note: >-
+    There is no error code field in the protocol envelope, so a client cannot branch on a
+    stable identifier - only on HTTP status and English prose.
+problem_types:
+- id: unsupported-api-call
+  status: 400
+  title: Unsupported API call
+  observed_body: >-
+    {"error":true,"message":"Unsupported API call. Please see API specifications at
+    https://docs-api.payengine.co/"}
+  observed_at: https://api.payengine.co/
+  observed_date: '2026-08-26'
+  method: probed
+  remediation: >-
+    The requested path is not routed by the API host. Consult the API reference (partner
+    login required).
+  note: >-
+    This is the catch-all for every unmatched path on api.payengine.co, including
+    /.well-known/* paths.
+transaction_failure_channel:
+  description: >-
+    Card and ACH failures surface inside the transaction object, not as HTTP errors.
+  fields:
+  - name: status
+    example_values: [FAIL]
+    description: Overall transaction outcome.
+  - name: responseCode
+    description: >-
+      ISO 8583-style two-digit response code from the processor. Observed values in the
+      published samples - see errors/payengine-decline-codes.yml.
+  - name: hostResponseCode
+    description: Raw response code returned by the acquiring host.
+  - name: hostSystemMessage
+    example_values: [DECLINE, ERROR, CALL]
+    description: Short host verdict string accompanying the response code.
+  - name: maskedCardNumber
+    description: PAN with all but first six and last four digits masked.
+  webhook: PAYMENT_FAILED
+  see: errors/payengine-decline-codes.yml
+gaps:
+- >-
+  No published error-code registry. Partners cannot enumerate the failure modes of an
+  operation without a partner-console login.
+- >-
+  No RFC 9457 problem+json, so error responses are not self-describing and carry no
+  documentation URI.
+- >-
+  The two-channel model (HTTP envelope vs transaction status) is not stated as a
+  convention anywhere in the public docs; it has to be inferred from sample payloads.

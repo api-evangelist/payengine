@@ -1,0 +1,134 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.payengine.co/developer-docs/processing-payments/address-verification-service-avs-check
+name: PayEngine decline, response and AVS codes
+summary: >-
+  PayEngine publishes a complete AVS response-code table in its public docs, including
+  which codes Visa has retired and what each is now returned as - unusually good detail.
+  It does not publish a decline-code or reason-code registry: the responseCode /
+  hostResponseCode values that actually explain a decline appear only as example values
+  inside sample transaction payloads, and their meanings are not documented publicly.
+envelope_field: responseCode
+supporting_fields:
+- hostResponseCode
+- hostSystemMessage
+- status
+- avsResponse
+decline_code_registry_published: false
+decline_code_registry_note: >-
+  No decline-code reference page exists on the public docs host. The values below were
+  read from published sample transaction payloads and their approve/decline meaning
+  inferred from the accompanying hostSystemMessage in the same sample; the ISO 8583
+  interpretation is noted but PayEngine does not itself state it.
+response_codes:
+- code: '00'
+  host_system_message: null
+  outcome: approved
+  meaning: Approved. Appears on every successful sale, auth, capture, void and refund sample.
+  evidence: Published sample transaction payloads (responseCode "00" with hostResponseCode "00").
+- code: '05'
+  host_system_message: DECLINE
+  outcome: declined
+  meaning: >-
+    Declined by the issuer. Sample pairs responseCode "05" with hostResponseCode "300"
+    and hostSystemMessage "DECLINE".
+  action: >-
+    Do not retry the same card without cardholder action; ask for another payment method.
+  evidence: Published sample transaction payload.
+- code: '01'
+  host_system_message: CALL
+  outcome: referral
+  meaning: >-
+    Referral - issuer wants voice authorization. Sample carries status "FAIL" and
+    hostSystemMessage "CALL".
+  evidence: Published sample transaction payload.
+- code: '06'
+  host_system_message: ERROR
+  outcome: error
+  meaning: >-
+    Processing error. Sample carries status "FAIL" and hostSystemMessage "ERROR".
+  evidence: Published sample transaction payload.
+masked_to_buyer:
+  note: >-
+    PayEngine prints only APPROVED / DECLINED / FAILED on the customer and merchant
+    receipts it generates; the numeric responseCode is not shown to the cardholder. The
+    PAN is masked to first-six/last-four (e.g. 411111xxxxxx1111).
+avs_response_codes:
+  published: true
+  docs: https://docs.payengine.co/developer-docs/processing-payments/address-verification-service-avs-check
+  enablement: >-
+    AVS checking is not self-serve. Docs instruct partners to "contact the PayEngine
+    Customer Success team to enable AVS checks", including how approvals or declines are
+    handled per code.
+  codes:
+  - code: A
+    definition: Address matches - ZIP Code does not match
+  - code: B
+    definition: Street address match, Postal code in wrong format (international issuer)
+    superseded_by: 'A'
+    note: No longer used by Visa - expect AVS Response A.
+  - code: C
+    definition: Street address and postal code in wrong formats
+    superseded_by: 'R'
+    note: No longer used by Visa - expect AVS Response R.
+  - code: D
+    definition: Street address and postal code match (international issuer)
+    superseded_by: 'Z'
+    note: No longer used by Visa - expect AVS Response Z.
+  - code: E
+    definition: AVS Error
+  - code: F
+    definition: Address does compare and five-digit ZIP code does compare (UK only)
+    superseded_by: 'Z'
+    note: No longer used by Visa - expect AVS Response Z.
+  - code: G
+    definition: Service not supported by non-US issuer
+    superseded_by: 'R'
+    note: No longer used by Visa - expect AVS Response R.
+  - code: I
+    definition: Address information not verified by international issuer
+    superseded_by: 'R'
+    note: No longer used by Visa - expect AVS Response R.
+  - code: M
+    definition: Street Address and Postal code match (international issuer)
+    superseded_by: 'Z'
+    note: No longer used by Visa - expect AVS Response Z.
+  - code: N
+    definition: No Match on Address (Street) or ZIP
+  - code: O
+    definition: No Response sent
+  - code: P
+    definition: Postal codes match, Street address not verified due to incompatible formats
+    superseded_by: 'Z'
+    note: No longer used by Visa - expect AVS Response Z.
+  - code: R
+    definition: Retry, System unavailable or Timed out
+    note: >-
+      Docs state that when the AVS system is unavailable the issuer may return R, and the
+      merchant chooses whether to proceed based on risk appetite.
+  - code: S
+    definition: Service not supported by issuer
+    superseded_by: 'U'
+    note: No longer used by Visa - expect AVS Response U.
+  - code: U
+    definition: Address information is unavailable
+  - code: W
+    definition: 9-digit ZIP matches, Address (Street) does not match
+    superseded_by: 'Z'
+    note: No longer used by Visa - expect AVS Response Z.
+  - code: X
+    definition: Exact AVS Match
+    superseded_by: 'Z'
+    note: No longer used by Visa - expect AVS Response Z.
+  - code: Y
+    definition: Address (Street) and 5-digit ZIP match
+    superseded_by: 'Z'
+    note: No longer used by Visa - expect AVS Response Z.
+  - code: Z
+    definition: 5-digit ZIP matches, Address (Street) does not match
+gaps:
+- >-
+  No decline-code reference. A partner cannot map a responseCode to a remediation without
+  the gated API reference or a support conversation.
+- >-
+  No published CVV/CVC response-code table, though AVS is documented in full.

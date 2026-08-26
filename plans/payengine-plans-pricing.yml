@@ -1,0 +1,50 @@
+generated: '2026-08-26'
+method: searched
+source: https://www.payengine.co/pricing
+name: PayEngine pricing
+summary: >-
+  PayEngine publishes no priced plans. Its pricing page names three pricing COMPONENTS -
+  platform SaaS fees, a variable buy-rate markup, and customized models - but attaches no
+  numbers, no currency, no billing period and no included quota to any of them. Every
+  path ends at "Get a Custom Quote" or a demo request. This is the standard posture for a
+  payfac-as-a-service platform whose economics are a revenue share negotiated per
+  partner, but it means a buyer cannot compare PayEngine on price without a sales call.
+plan_count: 0
+pricing_model: contact-sales
+currency: null
+public_rate_card: false
+checked: '2026-08-26'
+pricing_url: https://www.payengine.co/pricing
+pricing_url_status: 200
+pricing_components:
+- name: Platform SaaS fees
+  description: Direct access to the tooling, with the partner controlling their own data.
+  price: null
+- name: Variable buy-rate markup
+  description: Pre-negotiated processing rates with a markup added.
+  price: null
+- name: Customized pricing models
+  description: Flexible arrangements tailored to the partner's business.
+  price: null
+published_statement: >-
+  "our pricing is a mix of platform fees and revenue shares Depending on the
+  relationships in place."
+calls_to_action:
+- label: Get a Custom Quote
+  url: https://www.payengine.co/pricing
+- label: See a Demo
+  url: https://www.payengine.co/demo-request
+related_merchant_economics:
+  note: >-
+    PayEngine does document the levers that move a MERCHANT's effective cost even though
+    it prices nothing itself - Level 2/Level 3 commercial-card data qualification for
+    lower interchange, and a surcharge capability.
+  docs:
+  - https://docs.payengine.co/developer-docs/processing-payments/level2
+  - https://docs.payengine.co/developer-docs/surcharge
+  fee_schedules:
+    description: >-
+      Fee schedules are a first-class object - merchants carry a fee_schedule_id, and
+      changes raise a MERCHANT_UPDATED webhook carrying both the new and previous
+      fee_schedule_id. The schedules themselves are configured per-partner in the console
+      and are not published.

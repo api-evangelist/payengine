@@ -1,0 +1,154 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Direct HTTPS probes of every PayEngine host on 2026-08-26. No pointer is emitted for
+  this artifact: every path missed, so recording it would assert a surface PayEngine does
+  not serve.
+name: PayEngine well-known discovery probe
+summary: >-
+  PayEngine serves no /.well-known documents on any of its five public hosts. The apex and
+  docs hosts return hard 404s, the API host answers every path with its own JSON 400
+  envelope, and console.payengine.co is a single-page-app catch-all that returns an
+  identical 814-byte React shell for every path probed - an HTTP 200 that carries no
+  document and must not be read as a hit.
+hosts:
+- host: www.payengine.co
+  note: >-
+    Webflow-hosted marketing site. Returns a distinctive 404 body reading
+    "Invalid .well-known request".
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: api.payengine.co
+  note: >-
+    Production API host. Every unmatched path returns HTTP 400 with the JSON body
+    {"error":true,"message":"Unsupported API call. Please see API specifications at
+    https://docs-api.payengine.co/"} - a real API envelope, not a document.
+  documents:
+  - path: /.well-known/security.txt
+    status: 400
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 400
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 400
+    file: null
+  - path: /.well-known/api-catalog
+    status: 400
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 400
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 400
+    file: null
+- host: console.payengine.co
+  note: >-
+    SPA catch-all. All seven paths returned HTTP 200 with a byte-identical 814-byte
+    "<!doctype html>" React shell. Recorded as MISSES, not hits - this is the dominant
+    false positive on well-known probing.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    result: html-shell
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    result: html-shell
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    result: html-shell
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    result: html-shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    result: html-shell
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    result: html-shell
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    result: html-shell
+- host: docs.payengine.co
+  note: GitBook-hosted public developer docs. Next.js 404 page on every well-known path.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: status.payengine.co
+  note: Hosted status page.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+findings:
+  documents_served: 0
+  security_txt: false
+  api_catalog: false
+  openid_configuration: false
+  oauth_authorization_server: false
+  agent_card: false
+  pointer_emitted: false
+  pointer_withheld_reason: >-
+    No path on any host returned a real document. Emitting a WellKnown or SecurityTxt
+    pointer would credit PayEngine with a surface its own probe record shows is absent.

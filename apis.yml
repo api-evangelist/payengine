@@ -13,6 +13,17 @@ description: >-
   Visa's Global Registry under Platform Factory, Inc. Integration is REST plus a signed
   webhook surface of 37 documented events; the REST reference itself requires a partner
   login.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.prod.website-files.com/64cc25b62ffdab8b077809ed/64f2c783505aa955d658014b_payengine-opengrpah.jpg
 url: https://raw.githubusercontent.com/api-evangelist/payengine/refs/heads/main/apis.yml
 x-type: company

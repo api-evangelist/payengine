@@ -60,6 +60,18 @@ tags:
 - Payment Facilitation
 - Merchant Onboarding
 - Payment Gateway
+- Financial-Services
+- ACH
+- Tokenization
+- Webhook
+- Fintech
+- Company
+tags_raw:
+- Payments
+- Embedded Payments
+- Payment Facilitation
+- Merchant Onboarding
+- Payment Gateway
 - Financial Services
 - ACH
 - Tokenization
@@ -83,6 +95,10 @@ apis:
   humanURL: https://docs.payengine.co/developer-docs
   baseURL: https://api.payengine.co
   tags:
+  - Payments
+  - Merchant Onboarding
+  - Transaction
+  tags_raw:
   - Payments
   - Merchant Onboarding
   - Transactions

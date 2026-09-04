@@ -24,6 +24,22 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  probe_state: covered
+  source:
+  - authentication
+  - rate-limits
+  - security
+  - sandbox
+  generated: '2026-09-03'
+  method: derived
 image: https://cdn.prod.website-files.com/64cc25b62ffdab8b077809ed/64f2c783505aa955d658014b_payengine-opengrpah.jpg
 url: https://raw.githubusercontent.com/api-evangelist/payengine/refs/heads/main/apis.yml
 x-type: company

@@ -76,4 +76,3 @@ certified Service Provider.
 - API reference: https://docs-api.payengine.co/ (partner login required)
 - Status: https://status.payengine.co/
 - GitHub: https://github.com/payengine
-

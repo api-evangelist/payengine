@@ -76,7 +76,7 @@ tags:
 - Payment Facilitation
 - Merchant Onboarding
 - Payment Gateway
-- Financial-Services
+- Financial Services
 - ACH
 - Tokenization
 - Webhook
@@ -94,6 +94,7 @@ tags_raw:
 - Webhooks
 - Fintech
 - Company
+- Financial-Services
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

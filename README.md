@@ -64,15 +64,117 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-PayEngine is an embedded-payments and payment-facilitation platform for vertical market SaaS
-companies, operated by Platform Factory, Inc. Partners onboard sub-merchants, capture card and
-bank-account data through hosted SecureFields and a `<pay-engine>` web-component library, and
-process card and ACH payments with 3-D Secure, AVS, Level 2/3 interchange data, network
-tokenization, Tap to Pay and cloud-connected terminals. The platform is a PCI DSS Level 1
-certified Service Provider.
+PayEngine is an embedded-payments and payment-facilitation platform for vertical market SaaS companies, operated by Platform Factory, Inc. It lets a software company offer payments to its own customers without building an acquiring stack: PayEngine handles merchant onboarding and underwriting, PCI-scoped card and bank-account capture through hosted SecureFields and a <pay-engine> web-component library, card and ACH processing with 3-D Secure, AVS and Level 2/Level 3 interchange data, network tokenization, Tap to Pay and cloud-connected terminals, hosted payment links, subscriptions, disputes, settlement and payouts. A gateway-orchestration layer routes across multiple processors. The platform is a PCI DSS Level 1 certified Service Provider, listed in Visa's Global Registry under Platform Factory, Inc. Integration is REST plus a signed webhook surface of 37 documented events; the REST reference itself requires a partner login.
 
-- Website: https://www.payengine.co/
-- Developer docs: https://docs.payengine.co/developer-docs
-- API reference: https://docs-api.payengine.co/ (partner login required)
-- Status: https://status.payengine.co/
-- GitHub: https://github.com/payengine
+**Areas:** Payments · Embedded Payments · Payment Facilitation · Merchant Onboarding · Payment Gateway · Financial Services · ACH · Tokenization · Webhook · Fintech · Company
+
+## PayEngine on APIs.io
+
+Everything profiled for PayEngine is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/payengine/](https://apis.io/providers/payengine/)** — or go straight to one of the APIs or properties below.
+
+### APIs (1)
+
+- [PayEngine Platform API](https://apis.io/apis/payengine/payengine-platform-api/) — REST API for merchant onboarding, card and ACH transaction processing (auth, sale, capture, void, refund, offline and device sale), card and bank-account…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Payengine Webhooks](https://apis.io/asyncapis/payengine/payengine-webhooks/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Payengine Authentication](https://apis.io/security/payengine/payengine-authentication/)
+- [Payengine Domain Security](https://apis.io/security/payengine/payengine-domain-security/)
+- [Payengine Vulnerability Disclosure](https://apis.io/security/payengine/payengine-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Payengine Plans Pricing](https://apis.io/plans/payengine/payengine-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Payengine Rate Limits](https://apis.io/rate-limits/payengine/payengine-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.payengine.co/)
+- [Documentation](https://docs.payengine.co/developer-docs)
+- [Getting started](https://docs.payengine.co/developer-docs/getting-started-1/getting-started)
+- [API reference](https://docs-api.payengine.co/)
+- [Pricing](https://www.payengine.co/pricing)
+- [Sign up](https://console.payengine.co/signin)
+- [Support](https://www.payengine.co/contact-us)
+- [Blog](https://www.payengine.co/blog)
+- [Security](https://www.payengine.co/security)
+- [Terms of service](https://www.payengine.co/terms-of-service)
+- [Privacy policy](https://www.payengine.co/privacy-policy)
+- [GitHub](https://github.com/payengine)
+- [Status](https://status.payengine.co/)
+
+## API Evangelist rating
+
+**Kin Score 45.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 39.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 36.8 |
+| Developer ergonomics | 64.3 |
+| Access clarity | 39.5 |
+
+**Agent readiness 25.2** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 37.5** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/payengine/](https://apis.io/providers/payengine/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for PayEngine: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/payengine/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
